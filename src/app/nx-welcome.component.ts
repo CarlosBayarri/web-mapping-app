@@ -7,7 +7,6 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './nx-welcome.component.html',
-  styleUrls: ['./nx-welcome.component.scss'],
   styles: [],
   encapsulation: ViewEncapsulation.None,
 })
