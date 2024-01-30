@@ -8,7 +8,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./nx-welcome.component').then((m) => m.NxWelcomeComponent),
+    loadComponent: () => import('./welcome/nx-welcome.component').then((m) => m.NxWelcomeComponent),
   },
   {
     path: 'openlayers',

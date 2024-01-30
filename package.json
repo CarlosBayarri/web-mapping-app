@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
-    "build": "nx build --stats-json",
+    "build": "nx build --stats-json --skip-nx-cache",
     "analyze": "esbuild-visualizer --metadata dist/web-mapping-app/stats.json --filename dist/stats/index.html --open --template treemap",
     "test": "nx test"
   },
