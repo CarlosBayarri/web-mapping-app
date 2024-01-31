@@ -5,7 +5,6 @@ import TileLayer from 'ol/layer/Tile';
 import { OSM } from 'ol/source';
 import { FullScreen, defaults as defaultControls, OverviewMap } from 'ol/control';
 import { GeolocationControl } from './geolocation';
-import { CENTER, ZOOM } from '../../../app.constants';
 
 @Component({
   selector: 'web-mapping-app-controls',
@@ -33,8 +32,8 @@ export class ControlsComponent  implements OnInit {
       })]),
       target: 'map5',
       view: new View({
-        center: CENTER,
-        zoom: ZOOM,
+        center: [0, 0],
+        zoom: 2,
         projection: 'EPSG:4326',
       }),
     });

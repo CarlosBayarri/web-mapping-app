@@ -8,6 +8,7 @@ import { GeoJSON } from 'ol/format';
 import { geojsonObject, styleFunction } from './constants';
 import { Circle, Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
+import { CENTER, ZOOM } from '../../../app.constants';
 
 @Component({
   selector: 'web-mapping-app-layers',
@@ -44,8 +45,8 @@ export class LayersComponent  implements OnInit {
       ],
       target: 'map3',
       view: new View({
-        center: [0, 0],
-        zoom: 2,
+        center: CENTER,
+        zoom: ZOOM,
       }),
     });
   }

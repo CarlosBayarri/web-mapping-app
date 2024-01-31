@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import TileLayer from 'ol/layer/Tile';
-import { View, Map } from 'ol';
-import { OSM } from 'ol/source';
+import { map, tileLayer } from 'leaflet';
 import { CENTER, ZOOM } from '../../../app.constants';
 
 @Component({
@@ -14,17 +12,16 @@ import { CENTER, ZOOM } from '../../../app.constants';
 })
 export class SimpleMapComponent implements OnInit {
   ngOnInit(): void {
-    new Map({
-      layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
-      ],
-      target: 'map1',
-      view: new View({
-        center: CENTER,
-        zoom: ZOOM,
-      }),
+    const mapL = map('map1', {
+      center: CENTER,
+      zoom: ZOOM,
     });
+
+    const tiles = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    tiles.addTo(mapL);
   }
 }

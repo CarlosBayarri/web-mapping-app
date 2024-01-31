@@ -8,7 +8,6 @@ import VectorTileSource from 'ol/source/VectorTile';
 import { MVT } from 'ol/format';
 import { country, selectedCountry } from './constants';
 import { DblClickDragZoom, defaults as defaultInteractions} from 'ol/interaction';
-import { CENTER, ZOOM } from '../../../app.constants';
 
 
 
@@ -47,8 +46,8 @@ export class InteractionsComponent  implements OnInit {
       interactions: defaultInteractions().extend([new DblClickDragZoom()]),
       target: 'map4',
       view: new View({
-        center: CENTER,
-        zoom: ZOOM,
+        center: [0, 0],
+        zoom: 2,
         multiWorld: true,
       }),
     });
