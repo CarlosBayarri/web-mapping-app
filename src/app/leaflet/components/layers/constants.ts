@@ -1,83 +1,62 @@
-import CircleStyle from 'ol/style/Circle';
-import { Fill, Stroke, Style } from 'ol/style';
-import { Geometry } from 'ol/geom';
-import { Feature } from 'ol';
-import { StyleLike } from 'ol/style/Style';
 
-const image = new CircleStyle({
-  radius: 5,
-  fill: undefined,
-  stroke: new Stroke({color: 'red', width: 1}),
-});
 type GeometryTypes = 'Point' | 'LineString' | 'MultiLineString' | 'MultiPoint' | 'MultiPolygon' | 'Polygon' | 'GeometryCollection' | 'Circle';
 export const styles = {
-  'Point': new Style({
-    image: image,
-  }),
-  'LineString': new Style({
-    stroke: new Stroke({
-      color: 'green',
-      width: 1,
-    }),
-  }),
-  'MultiLineString': new Style({
-    stroke: new Stroke({
-      color: 'green',
-      width: 1,
-    }),
-  }),
-  'MultiPoint': new Style({
-    image: image,
-  }),
-  'MultiPolygon': new Style({
-    stroke: new Stroke({
-      color: 'yellow',
-      width: 1,
-    }),
-    fill: new Fill({
-      color: 'rgba(255, 255, 0, 0.1)',
-    }),
-  }),
-  'Polygon': new Style({
-    stroke: new Stroke({
-      color: 'blue',
-      lineDash: [4],
-      width: 3,
-    }),
-    fill: new Fill({
-      color: 'rgba(0, 0, 255, 0.1)',
-    }),
-  }),
-  'GeometryCollection': new Style({
-    stroke: new Stroke({
-      color: 'magenta',
-      width: 2,
-    }),
-    fill: new Fill({
-      color: 'magenta',
-    }),
-    image: new CircleStyle({
-      radius: 10,
-      fill: undefined,
-      stroke: new Stroke({
-        color: 'magenta',
-      }),
-    }),
-  }),
-  'Circle': new Style({
-    stroke: new Stroke({
-      color: 'red',
-      width: 2,
-    }),
-    fill: new Fill({
-      color: 'rgba(255,0,0,0.2)',
-    }),
-  }),
+  'Point': {
+    radius: 5,
+    fillColor: "red",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  },
+  'LineString': {
+    "color": "green",
+    "weight": 1,
+    "opacity": 0.65
+  },
+  'MultiLineString': {
+    "color": "green",
+    "weight": 1,
+    "opacity": 0.65
+  },
+  'MultiPoint': {
+    radius: 5,
+    fillColor: "red",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  },
+  'MultiPolygon':
+{
+  "color": "yellow",
+  "weight": 1,
+  "fillColor": "rgba(255, 255, 0, 0.1)",
+  "opacity": 0.65
+},
+  'Polygon':
+
+{
+  "color": "blue",
+  "weight": 2,
+  "fillColor": "rgba(0, 0, 255, 0.1",
+  "opacity": 0.65
+},
+  'GeometryCollection':
+    {
+      "color": "magenta",
+      "weight": 2,
+      "fillColor": "magenta",
+      "opacity": 0.65,
+      radius: 5,
+      fillOpacity: 0.8
+    },
+  'Circle': {}
 };
 
-export const styleFunction = function (feature: Feature<Geometry>) {
-  return styles[feature.getGeometry()?.getType() as GeometryTypes];
-} as StyleLike;
+export const styleFunction = function (feature: { geometry: { type: string; }; }) {
+  return styles[feature.geometry.type as GeometryTypes];
+};
 
 export const geojsonObject = {
   'type': 'FeatureCollection',
@@ -99,10 +78,7 @@ export const geojsonObject = {
       'type': 'Feature',
       'geometry': {
         'type': 'LineString',
-        'coordinates': [
-          [4e6, -2e6],
-          [8e6, 2e6],
-        ],
+        'coordinates': [[4e6, -2e6], [8e6, 2e6]],
       },
     },
     {
