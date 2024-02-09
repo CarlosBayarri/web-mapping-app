@@ -8,6 +8,8 @@ import VectorTileSource from 'ol/source/VectorTile';
 import { MVT } from 'ol/format';
 import { country, selectedCountry } from './constants';
 import { DblClickDragZoom, defaults as defaultInteractions} from 'ol/interaction';
+import L from 'leaflet';
+import { styles } from '../layers/constants';
 
 
 
@@ -20,77 +22,45 @@ import { DblClickDragZoom, defaults as defaultInteractions} from 'ol/interaction
 })
 export class InteractionsComponent  implements OnInit {
   ngOnInit(): void {
-    // lookup for selection objects
-    let selection: Record<string, any> = {};
-    const vtLayer = new VectorTileLayer({
-      declutter: true,
-      source: new VectorTileSource({
-        maxZoom: 15,
-        format: new MVT({
-          idProperty: 'iso_a3',
-        }),
-        url:
-          'https://ahocevar.com/geoserver/gwc/service/tms/1.0.0/' +
-          'ne:ne_10m_admin_0_countries@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf',
-      }),
-      style: country,
-    });
+    // Create a Leaflet map
+    const map = L.map('map4').setView([0, 0], 2);
 
-    const map = new Map({
-      layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
-        vtLayer
-      ],
-      interactions: defaultInteractions().extend([new DblClickDragZoom()]),
-      target: 'map4',
-      view: new View({
-        center: [0, 0],
-        zoom: 2,
-        multiWorld: true,
-      }),
-    });
+    // Add a tile layer to the map
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(map);
 
-    const selectionLayer = new VectorTileLayer({
-      map: map,
-      renderMode: 'hybrid',
-      source: vtLayer.getSource() as VectorTileSource,
-      style: function (feature) {
-        if (feature && feature.getId()) {
-          const id = feature.getId();
-          if (id && id in selection) {
-            return selectedCountry;
-          }
-          return;
-        }
-        return;
-      },
-    });
-
-    map.on(['click', 'pointermove'], function (event) {
-      if (event.type === 'pointermove') {
-        return;
+    // Create a GeoJSON layer and add it to the map
+    const geojsonLayer = L.geoJSON(undefined, {
+      style: function(feature) {
+        return styles[feature?.geometry.type as 'Polygon' | 'MultiPolygon' | 'LineString' | 'Point' | 'MultiPoint' | 'MultiLineString' | 'GeometryCollection' | 'Circle'];
       }
-      vtLayer.getFeatures((event as any).pixel).then(function (features) {
-        if (!features.length) {
-          selection = {};
-          selectionLayer.changed();
-          return;
-        }
-        const feature = features[0];
-        if (!feature) {
-          return;
-        }
-        const fid = feature.getId() as number;
+    }).addTo(map);
 
-          selection = {};
-        // add selected feature to lookup
-        selection[fid] = feature;
-
-        selectionLayer.changed();
+    // Fetch GeoJSON data and add it to the GeoJSON layer
+    fetch('https://gist.githubusercontent.com/ThomasG77/c38e6b0ecfd014342aad/raw/ecaa086688859566f108b9630047a7110ad6eb94/countries.geojson')
+      .then(response => response.json())
+      .then(data => {
+        geojsonLayer.addData(data);
       });
-    })
+    const selectionLayer = L.geoJSON().addTo(map);
+
+    geojsonLayer.on('click', function(event) {
+      // Obtén la característica en la que se hizo clic
+      const feature = event.layer.feature;
+
+      // Cambia el estilo de la capa de selección
+      selectionLayer.setStyle({
+        color: 'yellow',
+        weight: 2,
+        fillColor: 'rgba(255, 255, 0, 0.1)',
+        opacity: 0.65
+      });
+
+      // Añade la característica seleccionada a la capa de selección
+      selectionLayer.addData(feature);
+    });
   }
+
 }
 
