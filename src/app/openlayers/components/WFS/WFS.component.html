@@ -1,0 +1,27 @@
+<div id="welcome">
+  <h2>
+    WFS
+  </h2>
+</div>
+<div id="map7" class="map-container rounded"></div>
+<label for="areaSelector">Filtrar por área:</label>
+<select id="areaSelector">
+  <option value="0">0</option>
+  <option value="1">1</option>
+</select>
+<div class="info-panel">
+  <div class="info-panel-service">
+    <h3>WFS service URL</h3>
+    <span>{{url}}</span>
+    <h3>WFS service info</h3>
+    <ul>
+      <li *ngFor="let item of service">{{ item.name }}: {{ item.value }}</li>
+    </ul>
+  </div>
+  <div class="info-panel-layers" *ngIf="layerNames.length > 0">
+    <h3>WFS layers</h3>
+    <ul>
+      <li *ngFor="let layer of layerNames">{{ layer }}</li>
+    </ul>
+  </div>
+</div>
